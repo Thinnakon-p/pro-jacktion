@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การแจ้งเตือนรายชั่วโมง</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+     body{
+        margin: 0;
+     }
+
+     .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.pinimg.com/736x/f6/77/90/f677903e011e7ef50ee8700446623061.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5%);
+    z-index: -1;
+}
+            #countdown {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+                position: center; 
+                top: 20px;       
+                left: 20px;      
+                background-color: rgba(0, 0, 0, 0.5); 
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                
+            }
+
+            #timer {
+    color: #fff;
+    font-size: 2em;
+    margin-bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 16px; /* เพิ่ม border-radius */
+}
+
+input {
+    text-align: center ;
+    color: #fff;
+    background-color:rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 10px #fff;
+    padding:5px;
+    font-size: 1em;
+
+}
+
+button {
+    text-align: center ;
+    color: #fff;
+    margin: 6px;
+    box-shadow: 0px 0px 10px #fff;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 10px;
+    
+}
+
+
+
+            h1{
+                color: rgb(255, 255, 255);
+                background-color: #1d1d1d;
+                backdrop-filter:blur(100%);
+                text-align: center;
+                text-shadow: 2px 2px 4px #817e7e;
+                margin: 6px;
+             }
+                    table {
+                width: 100%;
+                border-collapse: collapse;
+                }
+
+                th, td {
+                    color: #fff;
+                 text-shadow: 2px 2px 4px #000000;
+                border: px solid black;
+                box-shadow: 1px 1px 9px#fff;
+                margin: 5px;
+                padding: 15px;
+                text-align: left;
+                }
+                th {
+                    color: white;
+                background-color: #000000;
+                }
+
+
+</style>
+
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+    <div class="container">
+        <header class="top-section">
+            <h1 class="name-text">ตารางเรียนช่วง Summer</h1>
+        </header>
+
+        <main class="middle-section">
+            <div class="timer-container">
+                <div id="countdown"></div>
+                <div id="timer">เลือกเวลา หน่วยนาที เวลาขึ้นด้านบน</div>
+                <input type="number" id="minutesInput" placeholder="Minutes" value="1">
+                <button id="startButton">Start Countdown</button>
+                <button id="stopButton"> stop boutton</button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>เวลา</th>
+                        <th>จันทร์</th>
+                        <th>อังคาร</th>
+                        <th>พุธ</th>
+                        <th>พฤหัส</th>
+                        <th>ศุกร์</th>
+                        <th>เสาร์</th>
+                        <th>อาทิตย์</th>
+                    </tr>
+                    <tr>
+                        <td>10.00-11.00</td>
+                        <td>ภาษาอังกฤษ</td>
+                        <td>CSS</td>
+                        <td>ภาษาเยอรมัน</td>
+                        <td>Java</td>
+                        <td>CSS</td>
+                        <td>ภาษาอังกฤษ</td>
+                        <td>Java</td>
+                    </tr>
+                    <tr>
+                        <td>11.00-12.00</td>
+                        <td>CSS</td>
+                        <td>ภาษาเยอรมัน</td>
+                        <td>Java</td>
+                        <td>ภาษาอังกฤษ</td>
+                        <td>Java</td>
+                        <td>ภาษาเยอรมัน</td>
+                        <td>CSS</td>
+                    </tr>
+                    <tr>
+                        <td>12.00-13.00</td>
+                        <td>พัก/เล่นเกม</td>
+                        <td>พัก/เล่นเกม</td>
+                        <td>พัก/เล่นเกม</td>
+                        <td>พัก/เล่นเกม</td>
+                        <td>พัก/เล่นเกม</td>
+                        <td>พัก/เล่นเกม</td>
+                        <td>พัก/เล่นเกม</td>
+                    </tr>
+                    <tr>
+                        <td>13.00-14.00</td>
+                        <td>ฝึกรูบิก</td>
+                        <td>ฝึกรูบิก</td>
+                        <td>ฝึกรูบิก</td>
+                        <td>ฝึกรูบิก</td>
+                        <td>ฝึกรูบิก</td>
+                        <td>ฝึกรูบิก</td>
+                        <td>ฝึกรูบิก</td>
+                    </tr>
+                    <tr>
+                        <td>14.00-15.00</td>
+                        <td>งานบ้าน</td>
+                        <td>งานบ้าน</td>
+                        <td>งานบ้าน</td>
+                        <td>งานบ้าน</td>
+                        <td>คณิตศาสตร์ </td>
+                        <td>งานบ้าน</td>
+                        <td>คณิตศาสตร์ </td>
+                    </tr>
+                    <tr>
+                        <td>15.00-16.00</td>
+                        <td>งานบ้าน</td>
+                        <td>งานบ้าน</td>
+                        <td>งานบ้าน</td>
+                        <td>งานบ้าน</td>
+                        <td>คณิตศาสตร์ </td>
+                        <td>งานบ้าน</td>
+                        <td>คณิตศาสตร์ </td>
+                    </tr>
+                    <tr>
+                        <td>16.00-17.00</td>
+                        <td>Java</td>
+                        <td>ภาษาอังกฤษ</td>
+                        <td>CSS</td>
+                        <td>ภาษาเยอรมัน</td>
+                        <td>พักผ่อน</td>
+                        <td>css</td>
+                        <td>ภาษาอังกฤษ</td>
+                    </tr>
+                    <tr>
+                        <td>17.00-18.00</td>
+                        <td>ภาษาเยอรมัน</td>
+                        <td>Java</td>
+                        <td>ภาษาอังกฤษ</td>
+                        <td>CSS</td>
+                        <td>Java</td>
+                        <td>Java</td>
+                        <td>ภาษาเยอรมัน</td>
+                    </tr>
+                    <tr>
+                        <td>18.00-19.00</td>
+                        <td>พัก/ดูหนังฟังเพลง</td>
+                        <td>พัก/ดูหนังฟังเพลง</td>
+                        <td>พัก/ดูหนังฟังเพลง</td>
+                        <td>พัก/ดูหนังฟังเพลง</td>
+                        <td>พัก/ดูหนังฟังเพลง</td>
+                        <td>พัก/ดูหนังฟังเพลง</td>
+                        <td>พัก/ดูหนังฟังเพลง</td>
+                    </tr>
+                    <tr>
+                        <td>19.00-21.00</td>
+                        <td>ฝึกรูบิก + เกม</td>
+                        <td>ฝึกรูบิก + เกม</td>
+                        <td>ฝึกรูบิก + เกม</td>
+                        <td>ฝึกรูบิก + เกม</td>
+                        <td>ฝึกรูบิก + เกม</td>
+                        <td>ฝึกรูบิก + เกม</td>
+                        <td>ฝึกรูบิก + เกม</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="animation-container">
+            </div>
+        </main>
+        <footer class="bottom-section">
+            <audio id="ant-sound" src="riser-hit-sfx-001-289802.mp3"></audio>
+            <audio id="dungeon-sound" src="stab-f-01-brvhrtz-224599.mp3"></audio>
+        </footer>
+    </div>
+    <script>
+        const countdownDisplay = document.getElementById('countdown');
+const timerDisplay = document.getElementById('timer');
+const startButton = document.getElementById('startButton');
+const stopButton = document.getElementById('stopButton'); // เลือกปุ่ม Stop
+const minutesInput = document.getElementById('minutesInput');
+let intervalId;
+let timeLeft;
+let startTime; // Keep track of start time
+
+function updateCountdown() {
+    if (timeLeft > 0) {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        countdownDisplay.textContent = `เริ่มจับเวลาแล้ว เริ่มเรียนได้!: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+        clearInterval(intervalId);
+        countdownDisplay.textContent = "Countdown Finished!";
+        startTimer(); // Start the timer after countdown
+    }
+}
+
+function startTimer() {
+    startTime = new Date().getTime(); // Capture the start time
+    intervalId = setInterval(updateTimer, 1000);
+
+    function updateTimer() {
+        let currentTime = new Date().getTime();
+        let elapsedTime = currentTime - startTime;
+        let seconds = Math.floor((elapsedTime / 1000) % 60);
+        let minutes = Math.floor((elapsedTime / 1000 / 60) % 60);
+        let hours = Math.floor(elapsedTime / 1000 / 60 / 60);
+        timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    startButton.disabled = true; // Disable Start button after starting
+    stopButton.disabled = false; // Enable Stop button
+}
+
+stopButton.addEventListener('click', function() {
+    clearInterval(intervalId);
+    countdownDisplay.textContent = ""; // Clear countdown display
+    timerDisplay.textContent = "00:00:00"; // Reset timer display
+    startButton.disabled = false; // Enable Start button
+    stopButton.disabled = true; // Disable Stop button
+});
+
+startButton.addEventListener('click', function() {
+    const minutes = parseInt(minutesInput.value, 10);
+    if (isNaN(minutes) || minutes <= 0) {
+        alert('Please enter a valid number of minutes.');
+        return;
+    }
+
+    timeLeft = minutes * 60;
+    updateCountdown();
+    intervalId = setInterval(updateCountdown, 1000);
+    startButton.disabled = true; // Disable the button after starting
+    stopButton.disabled = false; // Enable Stop button
+});
+
+// Initialize Stop button state
+stopButton.disabled = true;
+    </script>
+</body>
+
+</html>
