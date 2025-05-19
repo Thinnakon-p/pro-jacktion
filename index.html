@@ -1,573 +1,914 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ระบบล็อกอิน ครู-นักเรียน</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-
-  body {
-    margin: 0;
-    font-family: 'Kanit', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  #app {
-    background: #2a2a72;
-    padding: 30px;
-    max-width: 420px;
-    width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-  }
-  h1 {
-    margin-bottom: 20px;
-    font-weight: 700;
-    text-align: center;
-    color: #fceabb;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
-  }
-  label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 14px;
-  }
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 18px;
-    border-radius: 6px;
-    border: none;
-    font-size: 16px;
-    box-sizing: border-box;
-    outline: none;
-    transition: box-shadow 0.3s ease;
-  }
-  input[type="text"]:focus,
-  input[type="password"]:focus {
-    box-shadow: 0 0 8px 3px #ffde59;
-  }
-  button {
-    width: 100%;
-    background: #ffde59;
-    border: none;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: 700;
-    border-radius: 8px;
-    cursor: pointer;
-    color: #2a2a72;
-    box-shadow: 0 5px 15px #ffde59aa;
-    transition: background 0.3s ease;
-  }
-  button:hover {
-    background: #ffd930;
-  }
-  .message {
-    text-align: center;
-    margin-top: 12px;
-    font-weight: 700;
-  }
-  .error {
-    color: #ff6b6b;
-  }
-  .success {
-    color: #8cff61;
-  }
-  .user-list {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 15px;
-    background: #413f72;
-    padding: 15px;
-    border-radius: 10px;
-  }
-  .user-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #5e5ba6;
-    padding: 10px 0;
-    font-size: 15px;
-    color: #eee;
-  }
-  .user-item:last-child {
-    border-bottom: none;
-  }
-  .status-online {
-    color: #4ef24e;
-    font-weight: 700;
-  }
-  .status-offline {
-    color: #e24e4e;
-    font-weight: 700;
-  }
-  .block-btn, .unblock-btn, .logout-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-  }
-  .block-btn {
-    color: #ff6b6b;
-  }
-  .block-btn:hover {
-    background: #ff6b6b33;
-  }
-  .unblock-btn {
-    color: #8cff61;
-  }
-  .unblock-btn:hover {
-    background: #8cff6133;
-  }
-  .logout-btn {
-    color: #fceabb;
-    background: #764ba2cc;
-    margin-left: 15px;
-  }
-  .logout-btn:hover {
-    background: #764ba2ff;
-  }
-  .ip-log {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #ffd930;
-    font-weight: 600;
-  }
-  /* Scrollbar styling */
-  .user-list::-webkit-scrollbar {
-    width: 7px;
-  }
-  .user-list::-webkit-scrollbar-thumb {
-    background: #ffde59aa;
-    border-radius: 4px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ระบบล็อกอิน ครู-นักเรียน</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+    body {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #app {
+      background: #2a2a72;
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    h1, h2 {
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-align: center;
+      color: #fceabb;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 18px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+      box-sizing: border-box;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="number"]:focus {
+      box-shadow: 0 0 8px 3px #ffde59;
+    }
+    button {
+      width: 100%;
+      background: #ffde59;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #2a2a72;
+      box-shadow: 0 5px 15px #ffde59aa;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ffd930;
+    }
+    .message {
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 700;
+    }
+    .error {
+      color: #ff6b6b;
+    }
+    .success {
+      color: #8cff61;
+    }
+    .user-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 15px;
+      background: #413f72;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #5e5ba6;
+      padding: 10px 0;
+      font-size: 15px;
+      color: #eee;
+      flex-wrap: wrap;
+    }
+    .user-item:last-child {
+      border-bottom: none;
+    }
+    .status-online {
+      color: #4ef24e;
+      font-weight: 700;
+      min-width: 80px;
+      text-align: center;
+    }
+    .status-offline {
+      color: #e24e4e;
+      font-weight: 700;
+      min-width: 80px;
+      text-align: center;
+    }
+    .block-btn, .unblock-btn, .logout-btn, .edit-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+      margin-left: 5px;
+    }
+    .block-btn {
+      color: #ff6b6b;
+    }
+    .block-btn:hover {
+      background: #ff6b6b33;
+    }
+    .unblock-btn {
+      color: #8cff61;
+    }
+    .unblock-btn:hover {
+      background: #8cff6133;
+    }
+    .logout-btn {
+      color: #fceabb;
+      background: #764ba2cc;
+      margin-left: 15px;
+    }
+    .logout-btn:hover {
+      background: #764ba2ff;
+    }
+    .edit-btn {
+      color: #ffd930;
+    }
+    .edit-btn:hover {
+      background: #ffd93033;
+    }
+    .ip-log {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #ffd930;
+      font-weight: 600;
+      white-space: pre-wrap;
+    }
+    /* Scrollbar styling */
+    .user-list::-webkit-scrollbar {
+      width: 7px;
+    }
+    .user-list::-webkit-scrollbar-thumb {
+      background: #ffde59aa;
+      border-radius: 4px;
+    }
+    /* Admin styles */
+    #admin-screen {
+      display: none;
+      padding-top: 10px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    .navbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+    .navbar button {
+      background: #ffde59;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #2a2a72;
+    }
+    .navbar button:hover {
+      background: #ffd930;
+    }
+    .admin-section {
+      background: #413f72;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .admin-section h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    .user-form label {
+      margin-top: 10px;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .user-form input, .user-form select {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+    .user-form input:focus, .user-form select:focus {
+      box-shadow: 0 0 8px 3px #ffde59;
+    }
+  </style>
 </head>
 <body>
-<div id="app">
-  <div id="login-screen">
-    <h1>เข้าสู่ระบบครู-นักเรียน</h1>
-    <label for="username">ชื่อผู้ใช้</label>
-    <input type="text" id="username" maxlength="30" autocomplete="username" />
-    <label for="password">รหัสผ่าน</label>
-    <input type="password" id="password" autocomplete="current-password" />
-    <button id="login-btn">ล็อกอิน</button>
-    <div class="message error" id="login-error" style="display:none;"></div>
-    <div class="ip-log" id="ip-log" style="display:none;"></div>
+  <div id="app">
+    <div id="login-screen">
+      <h1>เข้าสู่ระบบครู-นักเรียน</h1>
+      <label for="username">ชื่อผู้ใช้</label>
+      <input type="text" id="username" maxlength="30" autocomplete="username" />
+      <label for="password">รหัสผ่าน</label>
+      <input type="password" id="password" autocomplete="current-password" />
+      <button id="login-btn">ล็อกอิน</button>
+      <div class="message error" id="login-error" style="display:none;"></div>
+      <div class="ip-log" id="ip-log" style="display:none;"></div>
+    </div>
+
+    <div id="teacher-screen" style="display:none;">
+      <h1>หน้าจอครู</h1>
+      <div>ผู้ใช้งานทั้งหมด (คลิกเพื่อบล็อก/ปลดบล็อก, ออฟไลน์จะถูกตั้งเวลา 5 นาทีหลังออก):</div>
+      <div class="user-list" id="teacher-user-list"></div>
+      <button class="logout-btn" id="teacher-logout-btn">ออกจากระบบ</button>
+    </div>
+
+    <div id="student-screen" style="display:none;">
+      <h1>หน้าจอนักเรียน</h1>
+      <p>ยินดีต้อนรับเข้าสู่ระบบนักเรียน!</p>
+      <button class="logout-btn" id="student-logout-btn">ออกจากระบบ</button>
+    </div>
+
+    <div id="admin-screen">
+      <div class="navbar">
+        <button id="admin-logout-btn">ออกจากระบบ</button>
+      </div>
+      <div class="admin-section" id="admin-section-user-management">
+        <h2>จัดการผู้ใช้</h2>
+        <div class="user-list" id="admin-user-list"></div>
+        <button id="admin-add-user-btn">เพิ่มผู้ใช้ใหม่</button>
+        <div id="admin-add-edit-user-form" style="display:none; margin-top:10px;">
+          <h3 id="form-title">เพิ่มผู้ใช้ใหม่</h3>
+          <div class="user-form">
+            <label for="form-username">ชื่อผู้ใช้</label>
+            <input type="text" id="form-username" />
+            <label for="form-password">รหัสผ่าน</label>
+            <input type="text" id="form-password" />
+            <label for="form-role">บทบาท</label>
+            <select id="form-role">
+              <option value="student">นักเรียน</option>
+              <option value="teacher">ครู</option>
+              <option value="admin">แอดมิน</option>
+            </select>
+            <label for="form-name">ชื่อ-นามสกุล</label>
+            <input type="text" id="form-name" />
+            <label for="form-studentid">เลขประจำตัว (ถ้ามี)</label>
+            <input type="text" id="form-studentid" />
+            <button id="form-save-btn" style="margin-top: 10px;">บันทึก</button>
+            <button id="form-cancel-btn" style="margin-top: 10px; background: #ff6b6b; color: white;">ยกเลิก</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h2>IP อันตราย (ล็อกอินผิดเกิน {{MAX_FAILED_ATTEMPTS}} ครั้ง)</h2>
+        <div class="user-list" id="dangerous-ip-list"></div>
+      </div>
+
+      <div class="admin-section">
+        <h2>สร้างรหัสนักเรียน</h2>
+        <button id="generate-student-code-btn">สร้างรหัสนักเรียน</button>
+        <ul id="generated-codes-list" style="margin-top: 10px; max-height: 150px; overflow-y: auto;"></ul>
+      </div>
+    </div>
   </div>
 
-  <div id="teacher-screen" style="display:none;">
-    <h1>หน้าจอครู</h1>
-    <div>ผู้ใช้งานทั้งหมด (กดปุ่มเพื่อบล็อก/ปลดบล็อก, ออฟไลน์จะถูกตั้งเวลา 5 นาทีหลังออก):</div>
-    <div class="user-list" id="teacher-user-list"></div>
-    <button class="logout-btn" id="teacher-logout-btn">ออกจากระบบ</button>
-  </div>
+  <script>
+    (() => {
+      'use strict';
 
-  <div id="student-screen" style="display:none;">
-    <h1>หน้าจอนักเรียน</h1>
-    <p>ยินดีต้อนรับเข้าสู่ระบบนักเรียน!</p>
-    <button class="logout-btn" id="student-logout-btn">ออกจากระบบ</button>
-  </div>
-</div>
+      const MAX_FAILED_ATTEMPTS = 5;
+      const BLOCK_TIME_MINUTES = 30;
 
-<script>
-  (() => {
-    'use strict';
+      // Simulated Excel user data with initial admin user
+      let usersExcel = [
+        {username: 'admin', password: 'adminpass', role: 'admin', blocked: false, online: false, name: 'แอดมิน', studentId: ''},
+        {username: 'teacher1', password: 'teachpass1', role: 'teacher', blocked: false, online: false, name: 'ครู 1', studentId: ''},
+        {username: 'student1', password: 'studpass1', role: 'student', blocked: false, online: false, name: 'นักเรียน 1', studentId: '001'},
+        {username: 'student2', password: 'studpass2', role: 'student', blocked: false, online: false, name: 'นักเรียน 2', studentId: '002'},
+        {username: 'teacher2', password: 'teachpass2', role: 'teacher', blocked: false, online: false, name: 'ครู 2', studentId: ''},
+        {username: 'student3', password: 'studpass3', role: 'student', blocked: false, online: false, name: 'นักเรียน 3', studentId: '003'}
+      ];
 
-    // Simulated Excel user data (username, password, role, block status)
-    // For demo purposes, passwords are plaintext. In real app, use hashing.
-    const usersExcel = [
-      {username: 'teacher1', password: 'teachpass1', role: 'teacher', blocked: false, online: false},
-      {username: 'student1', password: 'studpass1', role: 'student', blocked: false, online: false},
-      {username: 'student2', password: 'studpass2', role: 'student', blocked: false, online: false},
-      {username: 'teacher2', password: 'teachpass2', role: 'teacher', blocked: false, online: false},
-      {username: 'student3', password: 'studpass3', role: 'student', blocked: false, online: false}
-    ];
+      // LocalStorage keys for persisting data
+      const STORAGE_KEYS = {
+        blockedUsers: 'blockedUsersList',
+        onlineUsers: 'onlineUsersList',
+        ipLoginData: 'ipLoginData',
+        usersData: 'usersExcelData',
+        dangerousIPs: 'dangerousIPsData'
+      };
 
-    const MAX_FAILED_ATTEMPTS = 5;
-    const BLOCK_TIME_MINUTES = 30; // block duration for entire IP block
-    
-    // Attempt tracking per IP
-    // Since no real IP in frontend, we simulate IP with localStorage key "userIP"
-    // Typically in real case, backend sees real IP address.
-    
-    // Generate a pseudo-random IP for demo if no existing IP in storage
-    function generateFakeIP(){
-      return '192.168.' + Math.floor(Math.random()*255) + '.' + Math.floor(Math.random()*255);
-    }
-    let currentIP = localStorage.getItem('userIP') || generateFakeIP();
-    localStorage.setItem('userIP', currentIP);
-
-    // Track login attempts and block info per IP in localStorage
-    function getIPLoginData() {
-      let data = localStorage.getItem('ipLoginData');
-      if (!data) return {};
-      try {
-        return JSON.parse(data);
-      } catch {
-        return {};
-      }
-    }
-    function setIPLoginData(data) {
-      localStorage.setItem('ipLoginData', JSON.stringify(data));
-    }
-
-    // Track blocked users by username in localStorage
-    function getBlockedUsers() {
-      let data = localStorage.getItem('blockedUsers');
-      if (!data) return [];
-      try {
-        return JSON.parse(data);
-      } catch {
-        return [];
-      }
-    }
-    function setBlockedUsers(array) {
-      localStorage.setItem('blockedUsers', JSON.stringify(array));
-    }
-
-    // Track online users in localStorage for persistence and teacher view
-    function getOnlineUsers() {
-      let data = localStorage.getItem('onlineUsers');
-      if (!data) return [];
-      try {
-        return JSON.parse(data);
-      } catch {
-        return [];
-      }
-    }
-    function setOnlineUsers(array) {
-      localStorage.setItem('onlineUsers', JSON.stringify(array));
-    }
-
-    // UI Elements refs
-    const loginScreen = document.getElementById('login-screen');
-    const teacherScreen = document.getElementById('teacher-screen');
-    const studentScreen = document.getElementById('student-screen');
-    const loginBtn = document.getElementById('login-btn');
-    const loginError = document.getElementById('login-error');
-    const ipLog = document.getElementById('ip-log');
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const teacherUserList = document.getElementById('teacher-user-list');
-    const teacherLogoutBtn = document.getElementById('teacher-logout-btn');
-    const studentLogoutBtn = document.getElementById('student-logout-btn');
-
-    // Current logged in user object
-    let currentUser = null;
-
-    // Initialize blocked user list from localStorage and update in usersExcel to block users persistently
-    const blockedUsersPersist = getBlockedUsers();
-    blockedUsersPersist.forEach(blockedUsername => {
-      let u = usersExcel.find(us => us.username === blockedUsername);
-      if(u) u.blocked = true;
-    });
-
-    // Show login error message
-    function showLoginError(msg) {
-      loginError.textContent = msg;
-      loginError.style.display = 'block';
-    }
-    function hideLoginError() {
-      loginError.style.display = 'none';
-    }
-
-    // Show IP log message
-    function showIPLog(msg) {
-      ipLog.textContent = 'IP: ' + currentIP + ' - ' + msg;
-      ipLog.style.display = 'block';
-    }
-    function hideIPLog() {
-      ipLog.style.display = 'none';
-    }
-
-    // Check if current IP is globally blocked due to failed attempts
-    function isIPBlocked() {
-      const data = getIPLoginData();
-      if (!data[currentIP]) return false;
-      const {blockedUntil} = data[currentIP];
-      if (blockedUntil && new Date(blockedUntil) > new Date()) {
-        return true;
-      }
-      return false;
-    }
-
-    // Increment login failure count for current IP, apply block if max exceeded
-    function registerFailedLoginAttempt() {
-      let data = getIPLoginData();
-      if (!data[currentIP]) {
-        data[currentIP] = {count: 1, blockedUntil: null};
-      } else {
-        data[currentIP].count++;
-        if (data[currentIP].count >= MAX_FAILED_ATTEMPTS) {
-          const blockedUntil = new Date(Date.now() + BLOCK_TIME_MINUTES * 60000);
-          data[currentIP].blockedUntil = blockedUntil.toISOString();
+      // Load persisted data from localStorage or use defaults
+      function loadDataFromStorage() {
+        // Load users
+        const storedUsers = localStorage.getItem(STORAGE_KEYS.usersData);
+        if(storedUsers){
+          try {
+            usersExcel = JSON.parse(storedUsers);
+          } catch {}
+        }
+        // Load blocked users list
+        const blockedUsers = localStorage.getItem(STORAGE_KEYS.blockedUsers);
+        if(blockedUsers){
+          try {
+            const list = JSON.parse(blockedUsers);
+            usersExcel.forEach(u => {
+              u.blocked = list.includes(u.username);
+            });
+          } catch {}
         }
       }
-      setIPLoginData(data);
-    }
 
-    // Reset fail count for current IP after successful login
-    function resetLoginAttempts() {
-      let data = getIPLoginData();
-      if (data[currentIP]) {
-        delete data[currentIP];
+      // Save usersExcel to localStorage
+      function saveUsersData(){
+        localStorage.setItem(STORAGE_KEYS.usersData, JSON.stringify(usersExcel));
+        // Persist blocked users separately
+        const blockedList = usersExcel.filter(u => u.blocked).map(u => u.username);
+        localStorage.setItem(STORAGE_KEYS.blockedUsers, JSON.stringify(blockedList));
+      }
+
+      // Attempt tracking per IP
+      function getIPLoginData() {
+        let data = localStorage.getItem(STORAGE_KEYS.ipLoginData);
+        if (!data) return {};
+        try {
+          return JSON.parse(data);
+        } catch {
+          return {};
+        }
+      }
+      function setIPLoginData(data) {
+        localStorage.setItem(STORAGE_KEYS.ipLoginData, JSON.stringify(data));
+      }
+
+      // Dangerous IPs
+      function getDangerousIPs() {
+        const data = localStorage.getItem(STORAGE_KEYS.dangerousIPs);
+        if(!data) return [];
+        try {
+          return JSON.parse(data);
+        } catch {
+          return [];
+        }
+      }
+      function setDangerousIPs(list) {
+        localStorage.setItem(STORAGE_KEYS.dangerousIPs, JSON.stringify(list));
+      }
+
+      // Track online users in localStorage
+      function getOnlineUsers() {
+        let data = localStorage.getItem(STORAGE_KEYS.onlineUsers);
+        if (!data) return [];
+        try {
+          return JSON.parse(data);
+        } catch {
+          return [];
+        }
+      }
+      function setOnlineUsers(array) {
+        localStorage.setItem(STORAGE_KEYS.onlineUsers, JSON.stringify(array));
+      }
+
+      // HTML elements
+      const loginScreen = document.getElementById('login-screen');
+      const teacherScreen = document.getElementById('teacher-screen');
+      const studentScreen = document.getElementById('student-screen');
+      const adminScreen = document.getElementById('admin-screen');
+      const loginBtn = document.getElementById('login-btn');
+      const loginError = document.getElementById('login-error');
+      const ipLog = document.getElementById('ip-log');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const teacherUserList = document.getElementById('teacher-user-list');
+      const adminUserList = document.getElementById('admin-user-list');
+      const dangerousIpList = document.getElementById('dangerous-ip-list');
+      const teacherLogoutBtn = document.getElementById('teacher-logout-btn');
+      const studentLogoutBtn = document.getElementById('student-logout-btn');
+      const adminLogoutBtn = document.getElementById('admin-logout-btn');
+      const generateStudentCodeBtn = document.getElementById('generate-student-code-btn');
+
+      const adminAddUserBtn = document.getElementById('admin-add-user-btn');
+      const adminAddEditForm = document.getElementById('admin-add-edit-user-form');
+      const formTitle = document.getElementById('form-title');
+      const formUsername = document.getElementById('form-username');
+      const formPassword = document.getElementById('form-password');
+      const formRole = document.getElementById('form-role');
+      const formName = document.getElementById('form-name');
+      const formStudentId = document.getElementById('form-studentid');
+      const formSaveBtn = document.getElementById('form-save-btn');
+      const formCancelBtn = document.getElementById('form-cancel-btn');
+
+      // Current logged in user and editing user index for admin form
+      let currentUser = null;
+      let editingUserIndex = null;
+
+      // Simulated current IP (in real app, provided by server)
+      let currentIP = '';
+
+      // Utility function: generate fake IP
+      function generateFakeIP(){
+        return '192.168.' + Math.floor(Math.random()*255) + '.' + Math.floor(Math.random()*255);
+      }
+      function getCurrentIP(){
+        if(currentIP) return currentIP;
+        let ip = localStorage.getItem('userIP') || generateFakeIP();
+        localStorage.setItem('userIP', ip);
+        currentIP = ip;
+        return ip;
+      }
+
+      // Show messages
+      function showLoginError(msg) {
+        loginError.textContent = msg;
+        loginError.style.display = 'block';
+      }
+      function hideLoginError() {
+        loginError.style.display = 'none';
+      }
+      function showIPLog(msg) {
+        ipLog.textContent = `IP: ${getCurrentIP()} - ${msg}`;
+        ipLog.style.display = 'block';
+      }
+      function hideIPLog() {
+        ipLog.style.display = 'none';
+      }
+
+      function isIPBlocked() {
+        const data = getIPLoginData();
+        const ip = getCurrentIP();
+        if (!data[ip]) return false;
+        const {blockedUntil} = data[ip];
+        if (blockedUntil && new Date(blockedUntil) > new Date()) {
+          return true;
+        }
+        return false;
+      }
+
+      function registerFailedLoginAttempt() {
+        const data = getIPLoginData();
+        const ip = getCurrentIP();
+        if (!data[ip]) {
+          data[ip] = {count: 1, blockedUntil: null};
+        } else {
+          data[ip].count++;
+          if (data[ip].count >= MAX_FAILED_ATTEMPTS) {
+            const blockedUntil = new Date(Date.now() + BLOCK_TIME_MINUTES * 60000);
+            data[ip].blockedUntil = blockedUntil.toISOString();
+            addDangerousIP(ip);
+          }
+        }
         setIPLoginData(data);
       }
-    }
 
-    // Block a user by username - also mark in usersExcel and persist
-    function blockUser(username) {
-      if (!username) return;
-      let u = usersExcel.find(us => us.username === username);
-      if (u) {
-        u.blocked = true;
-        // Save to localStorage persistently
-        let blockedList = getBlockedUsers();
-        if(!blockedList.includes(username)) {
-          blockedList.push(username);
-          setBlockedUsers(blockedList);
+      function resetLoginAttempts() {
+        const data = getIPLoginData();
+        const ip = getCurrentIP();
+        if (data[ip]) {
+          delete data[ip];
+          setIPLoginData(data);
         }
-        // Also online status off if blocking
-        setUserOnline(username, false);
       }
-    }
-    // Unblock user by username
-    function unblockUser(username) {
-      if(!username) return;
-      let u = usersExcel.find(us => us.username === username);
-      if (u) {
-        u.blocked = false;
-        // Persist unblock
-        let blockedList = getBlockedUsers();
-        blockedList = blockedList.filter(name => name !== username);
-        setBlockedUsers(blockedList);
-      }
-    }
 
-    // Set user online status and save to localStorage
-    function setUserOnline(username, online) {
-      if(!username) return;
-      let onlineUsers = getOnlineUsers();
-      if (online) {
-        if (!onlineUsers.includes(username)) {
-          onlineUsers.push(username);
+      function addDangerousIP(ip) {
+        const dangerousIPs = getDangerousIPs();
+        if (!dangerousIPs.includes(ip)) {
+          dangerousIPs.push(ip);
+          setDangerousIPs(dangerousIPs);
+          renderDangerousIPs();
         }
-      } else {
-        onlineUsers = onlineUsers.filter(u => u !== username);
       }
-      setOnlineUsers(onlineUsers);
 
-      // Also update in usersExcel
-      let u = usersExcel.find(us => us.username === username);
-      if(u) u.online = online;
-    }
-    
-    // Check if user is online
-    function isUserOnline(username) {
-      const onlineUsers = getOnlineUsers();
-      return onlineUsers.includes(username);
-    }
+      function renderDangerousIPs() {
+        const ips = getDangerousIPs();
+        dangerousIpList.innerHTML = '';
+        if (ips.length === 0) {
+          dangerousIpList.textContent = 'ยังไม่มี IP อันตราย';
+          return;
+        }
+        ips.forEach(ip => {
+          // Note: Location is "Unknown" as no real geolocation available here
+          const div = document.createElement('div');
+          div.textContent = `IP: ${ip} - Location: Unknown`;
+          dangerousIpList.appendChild(div);
+        });
+      }
 
-    // Rendering teacher user list
-    function renderTeacherUserList(){
-      teacherUserList.innerHTML = '';
-      usersExcel.forEach(user => {
-        const div = document.createElement('div');
-        div.className = 'user-item';
-
-        const nameSpan = document.createElement('span');
-        nameSpan.textContent = user.username + (user.role==='teacher' ? ' (ครู)' : ' (นักเรียน)');
-        div.appendChild(nameSpan);
-
-        const statusSpan = document.createElement('span');
-        statusSpan.textContent = isUserOnline(user.username) ? 'ออนไลน์' : 'ออฟไลน์';
-        statusSpan.className = isUserOnline(user.username) ? 'status-online' : 'status-offline';
-        div.appendChild(statusSpan);
-
-        // Block/unblock buttons if user is blocked or not
-        const btnBlockUnblock = document.createElement('button');
-        if(user.blocked){
-          btnBlockUnblock.textContent = 'ปลดบล็อก';
-          btnBlockUnblock.className = 'unblock-btn';
-          btnBlockUnblock.title = 'ปลดบล็อกผู้ใช้';
-          btnBlockUnblock.onclick = () => {
-            unblockUser(user.username);
-            renderTeacherUserList();
-          };
+      // Online user functions
+      function getOnlineUsers() {
+        let data = localStorage.getItem(STORAGE_KEYS.onlineUsers);
+        if (!data) return [];
+        try {
+          return JSON.parse(data);
+        } catch {
+          return [];
+        }
+      }
+      function setOnlineUsers(array) {
+        localStorage.setItem(STORAGE_KEYS.onlineUsers, JSON.stringify(array));
+      }
+      function setUserOnline(username, online) {
+        if (!username) return;
+        const onlineUsers = getOnlineUsers();
+        let newOnline = [...onlineUsers];
+        if (online) {
+          if (!newOnline.includes(username)) {
+            newOnline.push(username);
+          }
         } else {
-          btnBlockUnblock.textContent = 'บล็อก';
-          btnBlockUnblock.className = 'block-btn';
-          btnBlockUnblock.title = 'บล็อกผู้ใช้';
-          btnBlockUnblock.onclick = () => {
-            blockUser(user.username);
-            if(currentUser.username === user.username){
-              alert('คุณถูกบล็อกจากระบบ ระบบจะล็อกเอาท์คุณทันที');
-              logout();
+          newOnline = newOnline.filter(u => u !== username);
+        }
+        setOnlineUsers(newOnline);
+
+        // Update usersExcel too
+        let u = usersExcel.find(us => us.username === username);
+        if (u) u.online = online;
+      }
+      function isUserOnline(username) {
+        const onlineUsers = getOnlineUsers();
+        return onlineUsers.includes(username);
+      }
+
+      // Render user list for teacher/admin
+      function renderTeacherUserList() {
+        teacherUserList.innerHTML = '';
+        usersExcel.forEach(user => {
+          const div = document.createElement('div');
+          div.className = 'user-item';
+
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = `${user.username} (${user.role === 'teacher' ? 'ครู' : (user.role === 'student' ? 'นักเรียน' : 'แอดมิน')}) - ${user.name}${user.studentId ? ' (ID: ' + user.studentId + ')' : ''}`;
+          div.appendChild(nameSpan);
+
+          const statusSpan = document.createElement('span');
+          statusSpan.textContent = isUserOnline(user.username) ? 'ออนไลน์' : 'ออฟไลน์';
+          statusSpan.className = isUserOnline(user.username) ? 'status-online' : 'status-offline';
+          div.appendChild(statusSpan);
+
+          // Block/unblock buttons
+          const btnBlockUnblock = document.createElement('button');
+          if (user.blocked) {
+            btnBlockUnblock.textContent = 'ปลดบล็อก';
+            btnBlockUnblock.className = 'unblock-btn';
+            btnBlockUnblock.title = 'ปลดบล็อกผู้ใช้';
+            btnBlockUnblock.onclick = () => {
+              unblockUser(user.username);
+              renderTeacherUserList();
+            };
+          } else {
+            btnBlockUnblock.textContent = 'บล็อก';
+            btnBlockUnblock.className = 'block-btn';
+            btnBlockUnblock.title = 'บล็อกผู้ใช้';
+            btnBlockUnblock.onclick = () => {
+              blockUser(user.username);
+              if (currentUser && currentUser.username === user.username) {
+                alert('คุณถูกบล็อกจากระบบ ระบบจะล็อกเอาท์คุณทันที');
+                logout();
+                return;
+              }
+              renderTeacherUserList();
+            };
+          }
+          div.appendChild(btnBlockUnblock);
+
+          // Force logout button if online and not current user and role teacher/admin
+          if (user.online && (!currentUser || user.username !== currentUser.username) && (currentUser && (currentUser.role==='teacher' || currentUser.role==='admin'))) {
+            const forceLogoutBtn = document.createElement('button');
+            forceLogoutBtn.textContent = 'ออกจากระบบ';
+            forceLogoutBtn.className = 'logout-btn';
+            forceLogoutBtn.title = 'บังคับให้ผู้ใช้ออกจากระบบ';
+            forceLogoutBtn.onclick = () => {
+              setUserOnline(user.username, false);
+              renderTeacherUserList();
+            };
+            div.appendChild(forceLogoutBtn);
+          }
+
+          teacherUserList.appendChild(div);
+        });
+      }
+
+      // Render admin user list with edit/delete functionality
+      function renderAdminUserList(){
+        adminUserList.innerHTML = '';
+        usersExcel.forEach((user, idx) => {
+          const div = document.createElement('div');
+          div.className = 'user-item';
+
+          const infoSpan = document.createElement('span');
+          infoSpan.textContent = `${user.username} (${user.role}) - ${user.name}${user.studentId ? ' (ID: ' + user.studentId + ')' : ''}`;
+          div.appendChild(infoSpan);
+
+          // Edit Button
+          const editBtn = document.createElement('button');
+          editBtn.textContent = 'แก้ไข';
+          editBtn.className = 'edit-btn';
+          editBtn.onclick = () => {
+            showAdminAddEditForm(user, idx);
+          };
+          div.appendChild(editBtn);
+
+          // Block/unblock buttons
+          const btnBlockUnblock = document.createElement('button');
+          if (user.blocked) {
+            btnBlockUnblock.textContent = 'ปลดบล็อก';
+            btnBlockUnblock.className = 'unblock-btn';
+            btnBlockUnblock.title = 'ปลดบล็อกผู้ใช้';
+            btnBlockUnblock.onclick = () => {
+              unblockUser(user.username);
+              renderAdminUserList();
+            };
+          } else {
+            btnBlockUnblock.textContent = 'บล็อก';
+            btnBlockUnblock.className = 'block-btn';
+            btnBlockUnblock.title = 'บล็อกผู้ใช้';
+            btnBlockUnblock.onclick = () => {
+              blockUser(user.username);
+              if (currentUser && currentUser.username === user.username) {
+                alert('คุณถูกบล็อกจากระบบ ระบบจะล็อกเอาท์คุณทันที');
+                logout();
+                return;
+              }
+              renderAdminUserList();
+            };
+          }
+          div.appendChild(btnBlockUnblock);
+
+          // Delete user button - cannot delete current admin user
+          if(currentUser && currentUser.role === 'admin' && user.username !== currentUser.username){
+            const delBtn = document.createElement('button');
+            delBtn.textContent = 'ลบ';
+            delBtn.style.backgroundColor = '#e24e4e';
+            delBtn.style.color = '#fff';
+            delBtn.style.marginLeft = '5px';
+            delBtn.style.border = 'none';
+            delBtn.style.borderRadius = '6px';
+            delBtn.style.padding = '6px 10px';
+            delBtn.style.cursor = 'pointer';
+            delBtn.onclick = () => {
+              if(confirm(`คุณแน่ใจหรือไม่ที่จะลบผู้ใช้ ${user.username}?`)){
+                usersExcel.splice(idx, 1);
+                saveUsersData();
+                renderAdminUserList();
+                if(currentUser && currentUser.username === user.username){
+                  logout();
+                }
+              }
+            };
+            div.appendChild(delBtn);
+          }
+
+          adminUserList.appendChild(div);
+        });
+      }
+
+      // Block user function
+      function blockUser(username) {
+        const user = usersExcel.find(u => u.username === username);
+        if(user){
+          user.blocked = true;
+          setUserOnline(username, false);
+          saveUsersData();
+        }
+      }
+      function unblockUser(username){
+        const user = usersExcel.find(u => u.username === username);
+        if(user){
+          user.blocked = false;
+          saveUsersData();
+        }
+      }
+
+      // Login function
+      function attemptLogin(){
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        hideLoginError();
+        hideIPLog();
+
+        if(!username || !password){
+          showLoginError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+          return;
+        }
+
+        if(isIPBlocked()){
+          showLoginError('IP ของคุณถูกบล็อกเนื่องจากกรอกรหัสผิดเกินจำนวนครั้งที่กำหนด');
+          showIPLog('IP ถูกบล็อก ระบบจะปลดล็อกอัตโนมัติหลัง ' + BLOCK_TIME_MINUTES + ' นาที');
+          return;
+        }
+
+        const user = usersExcel.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+        if(!user){
+          registerFailedLoginAttempt();
+          showLoginError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+          showIPLog('ล็อกอินผิดพลาด');
+          return;
+        }
+
+        if(user.blocked){
+          showLoginError('บัญชีของคุณถูกบล็อกโดยผู้ดูแลระบบ โปรดติดต่อผู้ดูแล');
+          showIPLog('ล็อกอินผิดพลาด (บัญชีถูกบล็อก)');
+          return;
+        }
+
+        if(user.password !== password){
+          registerFailedLoginAttempt();
+          showLoginError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+          showIPLog('ล็อกอินผิดพลาด');
+          return;
+        }
+
+        // Successful login
+        resetLoginAttempts();
+        setUserOnline(user.username, true);
+        currentUser = user;
+
+        loginScreen.style.display = 'none';
+        hideIPLog();
+        hideLoginError();
+
+        switch(user.role){
+          case 'teacher':
+            teacherScreen.style.display = 'block';
+            studentScreen.style.display = 'none';
+            adminScreen.style.display = 'none';
+            renderTeacherUserList();
+            break;
+          case 'student':
+            teacherScreen.style.display = 'none';
+            studentScreen.style.display = 'block';
+            adminScreen.style.display = 'none';
+            break;
+          case 'admin':
+            teacherScreen.style.display = 'none';
+            studentScreen.style.display = 'none';
+            adminScreen.style.display = 'block';
+            renderAdminUserList();
+            renderDangerousIPs();
+            break;
+          default:
+            // fallback to login screen
+            logout();
+        }
+      }
+
+      // Logout function
+      function logout(){
+        if(currentUser){
+          setUserOnline(currentUser.username, false);
+          currentUser = null;
+        }
+        hideLoginError();
+        hideIPLog();
+        loginScreen.style.display = 'block';
+        teacherScreen.style.display = 'none';
+        studentScreen.style.display = 'none';
+        adminScreen.style.display = 'none';
+        clearFields();
+        hideAddEditForm();
+      }
+
+      // Clear inputs
+      function clearFields(){
+        usernameInput.value = '';
+        passwordInput.value = '';
+      }
+
+      // Admin add/edit user form
+      function showAdminAddEditForm(user = null, idx = null){
+        adminAddEditForm.style.display = 'block';
+        if(user && idx !== null){
+          formTitle.textContent = 'แก้ไขผู้ใช้: ' + user.username;
+          formUsername.value = user.username;
+          formUsername.disabled = true;
+          formPassword.value = user.password;
+          formRole.value = user.role;
+          formName.value = user.name;
+          formStudentId.value = user.studentId || '';
+          editingUserIndex = idx;
+        } else {
+          formTitle.textContent = 'เพิ่มผู้ใช้ใหม่';
+          formUsername.value = '';
+          formUsername.disabled = false;
+          formPassword.value = '';
+          formRole.value = 'student';
+          formName.value = '';
+          formStudentId.value = '';
+          editingUserIndex = null;
+        }
+      }
+      function hideAddEditForm(){
+        adminAddEditForm.style.display = 'none';
+      }
+
+      // Save user from form
+      function saveUserFromForm(){
+        const username = formUsername.value.trim();
+        const password = formPassword.value;
+        const role = formRole.value;
+        const name = formName.value.trim();
+        const studentId = formStudentId.value.trim();
+
+        if(!username || !password || !role || !name){
+          alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+          return;
+        }
+        // If editing
+        if(editingUserIndex !== null){
+          const user = usersExcel[editingUserIndex];
+          if(user.username !== username){
+            // username change not allowed in edit mode, but just in case
+            if(usersExcel.some(u => u.username === username)){
+              alert('ชื่อผู้ใช้นี้ถูกใช้แล้ว');
               return;
             }
-            renderTeacherUserList();
-          };
+          }
+          user.password = password;
+          user.role = role;
+          user.name = name;
+          user.studentId = studentId;
+        } else {
+          // Adding new user
+          if(usersExcel.some(u => u.username === username)){
+            alert('ชื่อผู้ใช้นี้ถูกใช้แล้ว');
+            return;
+          }
+          usersExcel.push({
+            username,
+            password,
+            role,
+            blocked: false,
+            online: false,
+            name,
+            studentId,
+          });
         }
-        div.appendChild(btnBlockUnblock);
+        saveUsersData();
+        renderAdminUserList();
+        hideAddEditForm();
+      }
 
-        // Logout button for forcing user offline (teacher only)
-        if(user.online && user.username !== currentUser.username){
-          const forceLogoutBtn = document.createElement('button');
-          forceLogoutBtn.textContent = 'ออกจากระบบ';
-          forceLogoutBtn.className = 'logout-btn';
-          forceLogoutBtn.title = 'บังคับให้ผู้ใช้ออกจากระบบ';
-          forceLogoutBtn.onclick = () => {
-            setUserOnline(user.username, false);
-            renderTeacherUserList();
-          };
-          div.appendChild(forceLogoutBtn);
+      // Generate 20 random student codes for demo and show in admin screen
+      function generateStudentCodes(){
+        const codes = [];
+        for(let i=0; i<20; i++){
+          const code = Math.floor(100000 + Math.random()*900000).toString();
+          codes.push(code);
         }
-
-        teacherUserList.appendChild(div);
-      });
-    }
-
-    // Clear all input fields on logout
-    function clearFields(){
-      usernameInput.value = '';
-      passwordInput.value = '';
-    }
-
-    // Logout function
-    function logout(){
-      if(currentUser){
-        setUserOnline(currentUser.username, false);
-        currentUser = null;
+        showGeneratedCodes(codes);
       }
-      hideIPLog();
-      hideLoginError();
-      clearFields();
-      teacherScreen.style.display = 'none';
-      studentScreen.style.display = 'none';
-      loginScreen.style.display = 'block';
-    }
-
-    // Auto logout timer to simulate offline after 5 minutes of inactivity (for teacher only)
-    // We'll just reset timer on any button click in teacher interface
-    let logoutTimer = null;
-    function setupAutoLogout(){
-      clearTimeout(logoutTimer);
-      logoutTimer = setTimeout(() => {
-        alert("หมดเวลากดใช้งาน 5 นาที ระบบจะล็อกเอาท์โดยอัตโนมัติ");
-        logout();
-      }, 5*60*1000);
-    }
-
-    // Login logic
-    function attemptLogin(){
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
-
-      hideLoginError();
-      hideIPLog();
-
-      if (!username || !password) {
-        showLoginError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
-        return;
+      function showGeneratedCodes(codes){
+        const ul = document.getElementById('generated-codes-list');
+        ul.innerHTML = '';
+        codes.forEach(c => {
+          const li = document.createElement('li');
+          li.textContent = c;
+          ul.appendChild(li);
+        });
       }
 
-      // Check if IP blocked
-      if(isIPBlocked()){
-        showLoginError('IP ของคุณถูกบล็อกเนื่องจากกรอกรหัสผิดเกินจำนวนครั้งที่กำหนด');
-        showIPLog('IP ถูกบล็อก ระบบจะปลดล็อกอัตโนมัติหลัง 30 นาที');
-        return;
-      }
+      // UI event listeners
+      loginBtn.addEventListener('click', attemptLogin);
+      passwordInput.addEventListener('keyup', e => {if(e.key==='Enter'){attemptLogin();}});
+      usernameInput.addEventListener('keyup', e => {if(e.key==='Enter'){attemptLogin();}});
+      teacherLogoutBtn.addEventListener('click', logout);
+      studentLogoutBtn.addEventListener('click', logout);
+      adminLogoutBtn.addEventListener('click', logout);
+      generateStudentCodeBtn.addEventListener('click', generateStudentCodes);
+      adminAddUserBtn.addEventListener('click', () => showAdminAddEditForm());
+      formSaveBtn.addEventListener('click', saveUserFromForm);
+      formCancelBtn.addEventListener('click', hideAddEditForm);
 
-      // Find user in usersExcel with matching username (case-insensitive)
-      const user = usersExcel.find(u => u.username.toLowerCase() === username.toLowerCase());
+      // Initialize
+      loadDataFromStorage();
+      renderDangerousIPs();
 
-      if(!user){
-        registerFailedLoginAttempt();
-        showLoginError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-        showIPLog('ล็อกอินผิดพลาด');
-        return;
-      }
-
-      // Check if user is blocked
-      if(user.blocked){
-        showLoginError('บัญชีของคุณถูกบล็อกโดยผู้ดูแลระบบ โปรดติดต่อครูหรือผู้ดูแลระบบ');
-        showIPLog('ล็อกอินผิดพลาด (บัญชีถูกบล็อก)');
-        return;
-      }
-
-      // Check password (case-sensitive)
-      if(user.password !== password){
-        registerFailedLoginAttempt();
-        showLoginError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-        showIPLog('ล็อกอินผิดพลาด');
-        return;
-      }
-
-      // Successful login -> reset login attempts for IP
-      resetLoginAttempts();
-
-      // Set user online
-      setUserOnline(user.username, true);
-      currentUser = user;
-
-      // Switch screens
-      loginScreen.style.display = 'none';
-      if(user.role === 'teacher'){
-        teacherScreen.style.display = 'block';
-        studentScreen.style.display = 'none';
-        renderTeacherUserList();
-        setupAutoLogout();
-      } else {
-        teacherScreen.style.display = 'none';
-        studentScreen.style.display = 'block';
-      }
-    }
-
-    // Event listeners
-    loginBtn.addEventListener('click', attemptLogin);
-
-    passwordInput.addEventListener('keyup', (e) => {
-      if(e.key === 'Enter'){
-        attemptLogin();
-      }
-    });
-
-    usernameInput.addEventListener('keyup', (e) => {
-      if(e.key === 'Enter'){
-        attemptLogin();
-      }
-    });
-
-    teacherLogoutBtn.addEventListener('click', () => {
-      logout();
-    });
-
-    studentLogoutBtn.addEventListener('click', () => {
-      logout();
-    });
-
-    // Reset auto logout timer on any teacher interface interaction
-    teacherScreen.addEventListener('click', () => {
-      if(currentUser && currentUser.role === 'teacher'){
-        setupAutoLogout();
-      }
-    });
-
-  })();
-</script>
+    })();
+  </script>
 </body>
 </html>
 
