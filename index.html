@@ -1,319 +1,573 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>การแจ้งเตือนรายชั่วโมง</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ระบบล็อกอิน ครู-นักเรียน</title>
 <style>
-     body{
-        margin: 0;
-     }
+  @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 
-     .background {
-    position: fixed;
-    top: 0;
-    left: 0;
+  body {
+    margin: 0;
+    font-family: 'Kanit', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #app {
+    background: #2a2a72;
+    padding: 30px;
+    max-width: 420px;
     width: 100%;
-    height: 100%;
-    background-image: url('https://i.pinimg.com/736x/f6/77/90/f677903e011e7ef50ee8700446623061.jpg');
-    background-size: cover;
-    background-position: center;
-    z-index: -2;
-}
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  }
+  h1 {
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #fceabb;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  input[type="text"],
+  input[type="password"] {
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5%);
-    z-index: -1;
-}
-            #countdown {
-                font-size: 1.5em;
-                margin-bottom: 10px;
-                position: center; 
-                top: 20px;       
-                left: 20px;      
-                background-color: rgba(0, 0, 0, 0.5); 
-                color: white;
-                padding: 10px;
-                border-radius: 5px;
-                
-            }
-
-            #timer {
-    color: #fff;
-    font-size: 2em;
-    margin-bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 16px; /* เพิ่ม border-radius */
-}
-
-input {
-    text-align: center ;
-    color: #fff;
-    background-color:rgba(0, 0, 0, 0.5);
-    box-shadow: 0px 0px 10px #fff;
-    padding:5px;
-    font-size: 1em;
-
-}
-
-button {
-    text-align: center ;
-    color: #fff;
-    margin: 6px;
-    box-shadow: 0px 0px 10px #fff;
-    padding: 10px 20px;
-    font-size: 1em;
+    padding: 12px 15px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    box-shadow: 0 0 8px 3px #ffde59;
+  }
+  button {
+    width: 100%;
+    background: #ffde59;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 8px;
     cursor: pointer;
+    color: #2a2a72;
+    box-shadow: 0 5px 15px #ffde59aa;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #ffd930;
+  }
+  .message {
+    text-align: center;
+    margin-top: 12px;
+    font-weight: 700;
+  }
+  .error {
+    color: #ff6b6b;
+  }
+  .success {
+    color: #8cff61;
+  }
+  .user-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 15px;
+    background: #413f72;
+    padding: 15px;
     border-radius: 10px;
-    
-}
-
-
-
-            h1{
-                color: rgb(255, 255, 255);
-                background-color: #1d1d1d;
-                backdrop-filter:blur(100%);
-                text-align: center;
-                text-shadow: 2px 2px 4px #817e7e;
-                margin: 6px;
-             }
-                    table {
-                width: 100%;
-                border-collapse: collapse;
-                }
-
-                th, td {
-                    color: #fff;
-                 text-shadow: 2px 2px 4px #000000;
-                border: px solid black;
-                box-shadow: 1px 1px 9px#fff;
-                margin: 5px;
-                padding: 15px;
-                text-align: left;
-                }
-                th {
-                    color: white;
-                background-color: #000000;
-                }
-
-
+  }
+  .user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #5e5ba6;
+    padding: 10px 0;
+    font-size: 15px;
+    color: #eee;
+  }
+  .user-item:last-child {
+    border-bottom: none;
+  }
+  .status-online {
+    color: #4ef24e;
+    font-weight: 700;
+  }
+  .status-offline {
+    color: #e24e4e;
+    font-weight: 700;
+  }
+  .block-btn, .unblock-btn, .logout-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  .block-btn {
+    color: #ff6b6b;
+  }
+  .block-btn:hover {
+    background: #ff6b6b33;
+  }
+  .unblock-btn {
+    color: #8cff61;
+  }
+  .unblock-btn:hover {
+    background: #8cff6133;
+  }
+  .logout-btn {
+    color: #fceabb;
+    background: #764ba2cc;
+    margin-left: 15px;
+  }
+  .logout-btn:hover {
+    background: #764ba2ff;
+  }
+  .ip-log {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ffd930;
+    font-weight: 600;
+  }
+  /* Scrollbar styling */
+  .user-list::-webkit-scrollbar {
+    width: 7px;
+  }
+  .user-list::-webkit-scrollbar-thumb {
+    background: #ffde59aa;
+    border-radius: 4px;
+  }
 </style>
-
+</head>
 <body>
-    <div class="background"></div>
-    <div class="overlay"></div>
-    <div class="container">
-        <header class="top-section">
-            <h1 class="name-text">ตารางเรียนช่วง Summer</h1>
-        </header>
+<div id="app">
+  <div id="login-screen">
+    <h1>เข้าสู่ระบบครู-นักเรียน</h1>
+    <label for="username">ชื่อผู้ใช้</label>
+    <input type="text" id="username" maxlength="30" autocomplete="username" />
+    <label for="password">รหัสผ่าน</label>
+    <input type="password" id="password" autocomplete="current-password" />
+    <button id="login-btn">ล็อกอิน</button>
+    <div class="message error" id="login-error" style="display:none;"></div>
+    <div class="ip-log" id="ip-log" style="display:none;"></div>
+  </div>
 
-        <main class="middle-section">
-            <div class="timer-container">
-                <div id="countdown"></div>
-                <div id="timer">เลือกเวลา หน่วยนาที เวลาขึ้นด้านบน</div>
-                <input type="number" id="minutesInput" placeholder="Minutes" value="1">
-                <button id="startButton">Start Countdown</button>
-                <button id="stopButton"> stop boutton</button>
-            </div>
+  <div id="teacher-screen" style="display:none;">
+    <h1>หน้าจอครู</h1>
+    <div>ผู้ใช้งานทั้งหมด (กดปุ่มเพื่อบล็อก/ปลดบล็อก, ออฟไลน์จะถูกตั้งเวลา 5 นาทีหลังออก):</div>
+    <div class="user-list" id="teacher-user-list"></div>
+    <button class="logout-btn" id="teacher-logout-btn">ออกจากระบบ</button>
+  </div>
 
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <th>เวลา</th>
-                        <th>จันทร์</th>
-                        <th>อังคาร</th>
-                        <th>พุธ</th>
-                        <th>พฤหัส</th>
-                        <th>ศุกร์</th>
-                        <th>เสาร์</th>
-                        <th>อาทิตย์</th>
-                    </tr>
-                    <tr>
-                        <td>10.00-11.00</td>
-                        <td>ภาษาอังกฤษ</td>
-                        <td>CSS</td>
-                        <td>ภาษาเยอรมัน</td>
-                        <td>Java</td>
-                        <td>CSS</td>
-                        <td>ภาษาอังกฤษ</td>
-                        <td>Java</td>
-                    </tr>
-                    <tr>
-                        <td>11.00-12.00</td>
-                        <td>CSS</td>
-                        <td>ภาษาเยอรมัน</td>
-                        <td>Java</td>
-                        <td>ภาษาอังกฤษ</td>
-                        <td>Java</td>
-                        <td>ภาษาเยอรมัน</td>
-                        <td>CSS</td>
-                    </tr>
-                    <tr>
-                        <td>12.00-13.00</td>
-                        <td>พัก/เล่นเกม</td>
-                        <td>พัก/เล่นเกม</td>
-                        <td>พัก/เล่นเกม</td>
-                        <td>พัก/เล่นเกม</td>
-                        <td>พัก/เล่นเกม</td>
-                        <td>พัก/เล่นเกม</td>
-                        <td>พัก/เล่นเกม</td>
-                    </tr>
-                    <tr>
-                        <td>13.00-14.00</td>
-                        <td>ฝึกรูบิก</td>
-                        <td>ฝึกรูบิก</td>
-                        <td>ฝึกรูบิก</td>
-                        <td>ฝึกรูบิก</td>
-                        <td>ฝึกรูบิก</td>
-                        <td>ฝึกรูบิก</td>
-                        <td>ฝึกรูบิก</td>
-                    </tr>
-                    <tr>
-                        <td>14.00-15.00</td>
-                        <td>งานบ้าน</td>
-                        <td>งานบ้าน</td>
-                        <td>งานบ้าน</td>
-                        <td>งานบ้าน</td>
-                        <td>คณิตศาสตร์ </td>
-                        <td>งานบ้าน</td>
-                        <td>คณิตศาสตร์ </td>
-                    </tr>
-                    <tr>
-                        <td>15.00-16.00</td>
-                        <td>งานบ้าน</td>
-                        <td>งานบ้าน</td>
-                        <td>งานบ้าน</td>
-                        <td>งานบ้าน</td>
-                        <td>คณิตศาสตร์ </td>
-                        <td>งานบ้าน</td>
-                        <td>คณิตศาสตร์ </td>
-                    </tr>
-                    <tr>
-                        <td>16.00-17.00</td>
-                        <td>Java</td>
-                        <td>ภาษาอังกฤษ</td>
-                        <td>CSS</td>
-                        <td>ภาษาเยอรมัน</td>
-                        <td>พักผ่อน</td>
-                        <td>css</td>
-                        <td>ภาษาอังกฤษ</td>
-                    </tr>
-                    <tr>
-                        <td>17.00-18.00</td>
-                        <td>ภาษาเยอรมัน</td>
-                        <td>Java</td>
-                        <td>ภาษาอังกฤษ</td>
-                        <td>CSS</td>
-                        <td>Java</td>
-                        <td>Java</td>
-                        <td>ภาษาเยอรมัน</td>
-                    </tr>
-                    <tr>
-                        <td>18.00-19.00</td>
-                        <td>พัก/ดูหนังฟังเพลง</td>
-                        <td>พัก/ดูหนังฟังเพลง</td>
-                        <td>พัก/ดูหนังฟังเพลง</td>
-                        <td>พัก/ดูหนังฟังเพลง</td>
-                        <td>พัก/ดูหนังฟังเพลง</td>
-                        <td>พัก/ดูหนังฟังเพลง</td>
-                        <td>พัก/ดูหนังฟังเพลง</td>
-                    </tr>
-                    <tr>
-                        <td>19.00-21.00</td>
-                        <td>ฝึกรูบิก + เกม</td>
-                        <td>ฝึกรูบิก + เกม</td>
-                        <td>ฝึกรูบิก + เกม</td>
-                        <td>ฝึกรูบิก + เกม</td>
-                        <td>ฝึกรูบิก + เกม</td>
-                        <td>ฝึกรูบิก + เกม</td>
-                        <td>ฝึกรูบิก + เกม</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="animation-container">
-            </div>
-        </main>
-        <footer class="bottom-section">
-            <audio id="ant-sound" src="riser-hit-sfx-001-289802.mp3"></audio>
-            <audio id="dungeon-sound" src="stab-f-01-brvhrtz-224599.mp3"></audio>
-        </footer>
-    </div>
-    <script>
-        const countdownDisplay = document.getElementById('countdown');
-const timerDisplay = document.getElementById('timer');
-const startButton = document.getElementById('startButton');
-const stopButton = document.getElementById('stopButton'); // เลือกปุ่ม Stop
-const minutesInput = document.getElementById('minutesInput');
-let intervalId;
-let timeLeft;
-let startTime; // Keep track of start time
+  <div id="student-screen" style="display:none;">
+    <h1>หน้าจอนักเรียน</h1>
+    <p>ยินดีต้อนรับเข้าสู่ระบบนักเรียน!</p>
+    <button class="logout-btn" id="student-logout-btn">ออกจากระบบ</button>
+  </div>
+</div>
 
-function updateCountdown() {
-    if (timeLeft > 0) {
-        timeLeft--;
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        countdownDisplay.textContent = `เริ่มจับเวลาแล้ว เริ่มเรียนได้!: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    } else {
-        clearInterval(intervalId);
-        countdownDisplay.textContent = "Countdown Finished!";
-        startTimer(); // Start the timer after countdown
+<script>
+  (() => {
+    'use strict';
+
+    // Simulated Excel user data (username, password, role, block status)
+    // For demo purposes, passwords are plaintext. In real app, use hashing.
+    const usersExcel = [
+      {username: 'teacher1', password: 'teachpass1', role: 'teacher', blocked: false, online: false},
+      {username: 'student1', password: 'studpass1', role: 'student', blocked: false, online: false},
+      {username: 'student2', password: 'studpass2', role: 'student', blocked: false, online: false},
+      {username: 'teacher2', password: 'teachpass2', role: 'teacher', blocked: false, online: false},
+      {username: 'student3', password: 'studpass3', role: 'student', blocked: false, online: false}
+    ];
+
+    const MAX_FAILED_ATTEMPTS = 5;
+    const BLOCK_TIME_MINUTES = 30; // block duration for entire IP block
+    
+    // Attempt tracking per IP
+    // Since no real IP in frontend, we simulate IP with localStorage key "userIP"
+    // Typically in real case, backend sees real IP address.
+    
+    // Generate a pseudo-random IP for demo if no existing IP in storage
+    function generateFakeIP(){
+      return '192.168.' + Math.floor(Math.random()*255) + '.' + Math.floor(Math.random()*255);
     }
-}
+    let currentIP = localStorage.getItem('userIP') || generateFakeIP();
+    localStorage.setItem('userIP', currentIP);
 
-function startTimer() {
-    startTime = new Date().getTime(); // Capture the start time
-    intervalId = setInterval(updateTimer, 1000);
-
-    function updateTimer() {
-        let currentTime = new Date().getTime();
-        let elapsedTime = currentTime - startTime;
-        let seconds = Math.floor((elapsedTime / 1000) % 60);
-        let minutes = Math.floor((elapsedTime / 1000 / 60) % 60);
-        let hours = Math.floor(elapsedTime / 1000 / 60 / 60);
-        timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    // Track login attempts and block info per IP in localStorage
+    function getIPLoginData() {
+      let data = localStorage.getItem('ipLoginData');
+      if (!data) return {};
+      try {
+        return JSON.parse(data);
+      } catch {
+        return {};
+      }
+    }
+    function setIPLoginData(data) {
+      localStorage.setItem('ipLoginData', JSON.stringify(data));
     }
 
-    startButton.disabled = true; // Disable Start button after starting
-    stopButton.disabled = false; // Enable Stop button
-}
+    // Track blocked users by username in localStorage
+    function getBlockedUsers() {
+      let data = localStorage.getItem('blockedUsers');
+      if (!data) return [];
+      try {
+        return JSON.parse(data);
+      } catch {
+        return [];
+      }
+    }
+    function setBlockedUsers(array) {
+      localStorage.setItem('blockedUsers', JSON.stringify(array));
+    }
 
-stopButton.addEventListener('click', function() {
-    clearInterval(intervalId);
-    countdownDisplay.textContent = ""; // Clear countdown display
-    timerDisplay.textContent = "00:00:00"; // Reset timer display
-    startButton.disabled = false; // Enable Start button
-    stopButton.disabled = true; // Disable Stop button
-});
+    // Track online users in localStorage for persistence and teacher view
+    function getOnlineUsers() {
+      let data = localStorage.getItem('onlineUsers');
+      if (!data) return [];
+      try {
+        return JSON.parse(data);
+      } catch {
+        return [];
+      }
+    }
+    function setOnlineUsers(array) {
+      localStorage.setItem('onlineUsers', JSON.stringify(array));
+    }
 
-startButton.addEventListener('click', function() {
-    const minutes = parseInt(minutesInput.value, 10);
-    if (isNaN(minutes) || minutes <= 0) {
-        alert('Please enter a valid number of minutes.');
+    // UI Elements refs
+    const loginScreen = document.getElementById('login-screen');
+    const teacherScreen = document.getElementById('teacher-screen');
+    const studentScreen = document.getElementById('student-screen');
+    const loginBtn = document.getElementById('login-btn');
+    const loginError = document.getElementById('login-error');
+    const ipLog = document.getElementById('ip-log');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const teacherUserList = document.getElementById('teacher-user-list');
+    const teacherLogoutBtn = document.getElementById('teacher-logout-btn');
+    const studentLogoutBtn = document.getElementById('student-logout-btn');
+
+    // Current logged in user object
+    let currentUser = null;
+
+    // Initialize blocked user list from localStorage and update in usersExcel to block users persistently
+    const blockedUsersPersist = getBlockedUsers();
+    blockedUsersPersist.forEach(blockedUsername => {
+      let u = usersExcel.find(us => us.username === blockedUsername);
+      if(u) u.blocked = true;
+    });
+
+    // Show login error message
+    function showLoginError(msg) {
+      loginError.textContent = msg;
+      loginError.style.display = 'block';
+    }
+    function hideLoginError() {
+      loginError.style.display = 'none';
+    }
+
+    // Show IP log message
+    function showIPLog(msg) {
+      ipLog.textContent = 'IP: ' + currentIP + ' - ' + msg;
+      ipLog.style.display = 'block';
+    }
+    function hideIPLog() {
+      ipLog.style.display = 'none';
+    }
+
+    // Check if current IP is globally blocked due to failed attempts
+    function isIPBlocked() {
+      const data = getIPLoginData();
+      if (!data[currentIP]) return false;
+      const {blockedUntil} = data[currentIP];
+      if (blockedUntil && new Date(blockedUntil) > new Date()) {
+        return true;
+      }
+      return false;
+    }
+
+    // Increment login failure count for current IP, apply block if max exceeded
+    function registerFailedLoginAttempt() {
+      let data = getIPLoginData();
+      if (!data[currentIP]) {
+        data[currentIP] = {count: 1, blockedUntil: null};
+      } else {
+        data[currentIP].count++;
+        if (data[currentIP].count >= MAX_FAILED_ATTEMPTS) {
+          const blockedUntil = new Date(Date.now() + BLOCK_TIME_MINUTES * 60000);
+          data[currentIP].blockedUntil = blockedUntil.toISOString();
+        }
+      }
+      setIPLoginData(data);
+    }
+
+    // Reset fail count for current IP after successful login
+    function resetLoginAttempts() {
+      let data = getIPLoginData();
+      if (data[currentIP]) {
+        delete data[currentIP];
+        setIPLoginData(data);
+      }
+    }
+
+    // Block a user by username - also mark in usersExcel and persist
+    function blockUser(username) {
+      if (!username) return;
+      let u = usersExcel.find(us => us.username === username);
+      if (u) {
+        u.blocked = true;
+        // Save to localStorage persistently
+        let blockedList = getBlockedUsers();
+        if(!blockedList.includes(username)) {
+          blockedList.push(username);
+          setBlockedUsers(blockedList);
+        }
+        // Also online status off if blocking
+        setUserOnline(username, false);
+      }
+    }
+    // Unblock user by username
+    function unblockUser(username) {
+      if(!username) return;
+      let u = usersExcel.find(us => us.username === username);
+      if (u) {
+        u.blocked = false;
+        // Persist unblock
+        let blockedList = getBlockedUsers();
+        blockedList = blockedList.filter(name => name !== username);
+        setBlockedUsers(blockedList);
+      }
+    }
+
+    // Set user online status and save to localStorage
+    function setUserOnline(username, online) {
+      if(!username) return;
+      let onlineUsers = getOnlineUsers();
+      if (online) {
+        if (!onlineUsers.includes(username)) {
+          onlineUsers.push(username);
+        }
+      } else {
+        onlineUsers = onlineUsers.filter(u => u !== username);
+      }
+      setOnlineUsers(onlineUsers);
+
+      // Also update in usersExcel
+      let u = usersExcel.find(us => us.username === username);
+      if(u) u.online = online;
+    }
+    
+    // Check if user is online
+    function isUserOnline(username) {
+      const onlineUsers = getOnlineUsers();
+      return onlineUsers.includes(username);
+    }
+
+    // Rendering teacher user list
+    function renderTeacherUserList(){
+      teacherUserList.innerHTML = '';
+      usersExcel.forEach(user => {
+        const div = document.createElement('div');
+        div.className = 'user-item';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = user.username + (user.role==='teacher' ? ' (ครู)' : ' (นักเรียน)');
+        div.appendChild(nameSpan);
+
+        const statusSpan = document.createElement('span');
+        statusSpan.textContent = isUserOnline(user.username) ? 'ออนไลน์' : 'ออฟไลน์';
+        statusSpan.className = isUserOnline(user.username) ? 'status-online' : 'status-offline';
+        div.appendChild(statusSpan);
+
+        // Block/unblock buttons if user is blocked or not
+        const btnBlockUnblock = document.createElement('button');
+        if(user.blocked){
+          btnBlockUnblock.textContent = 'ปลดบล็อก';
+          btnBlockUnblock.className = 'unblock-btn';
+          btnBlockUnblock.title = 'ปลดบล็อกผู้ใช้';
+          btnBlockUnblock.onclick = () => {
+            unblockUser(user.username);
+            renderTeacherUserList();
+          };
+        } else {
+          btnBlockUnblock.textContent = 'บล็อก';
+          btnBlockUnblock.className = 'block-btn';
+          btnBlockUnblock.title = 'บล็อกผู้ใช้';
+          btnBlockUnblock.onclick = () => {
+            blockUser(user.username);
+            if(currentUser.username === user.username){
+              alert('คุณถูกบล็อกจากระบบ ระบบจะล็อกเอาท์คุณทันที');
+              logout();
+              return;
+            }
+            renderTeacherUserList();
+          };
+        }
+        div.appendChild(btnBlockUnblock);
+
+        // Logout button for forcing user offline (teacher only)
+        if(user.online && user.username !== currentUser.username){
+          const forceLogoutBtn = document.createElement('button');
+          forceLogoutBtn.textContent = 'ออกจากระบบ';
+          forceLogoutBtn.className = 'logout-btn';
+          forceLogoutBtn.title = 'บังคับให้ผู้ใช้ออกจากระบบ';
+          forceLogoutBtn.onclick = () => {
+            setUserOnline(user.username, false);
+            renderTeacherUserList();
+          };
+          div.appendChild(forceLogoutBtn);
+        }
+
+        teacherUserList.appendChild(div);
+      });
+    }
+
+    // Clear all input fields on logout
+    function clearFields(){
+      usernameInput.value = '';
+      passwordInput.value = '';
+    }
+
+    // Logout function
+    function logout(){
+      if(currentUser){
+        setUserOnline(currentUser.username, false);
+        currentUser = null;
+      }
+      hideIPLog();
+      hideLoginError();
+      clearFields();
+      teacherScreen.style.display = 'none';
+      studentScreen.style.display = 'none';
+      loginScreen.style.display = 'block';
+    }
+
+    // Auto logout timer to simulate offline after 5 minutes of inactivity (for teacher only)
+    // We'll just reset timer on any button click in teacher interface
+    let logoutTimer = null;
+    function setupAutoLogout(){
+      clearTimeout(logoutTimer);
+      logoutTimer = setTimeout(() => {
+        alert("หมดเวลากดใช้งาน 5 นาที ระบบจะล็อกเอาท์โดยอัตโนมัติ");
+        logout();
+      }, 5*60*1000);
+    }
+
+    // Login logic
+    function attemptLogin(){
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      hideLoginError();
+      hideIPLog();
+
+      if (!username || !password) {
+        showLoginError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
         return;
+      }
+
+      // Check if IP blocked
+      if(isIPBlocked()){
+        showLoginError('IP ของคุณถูกบล็อกเนื่องจากกรอกรหัสผิดเกินจำนวนครั้งที่กำหนด');
+        showIPLog('IP ถูกบล็อก ระบบจะปลดล็อกอัตโนมัติหลัง 30 นาที');
+        return;
+      }
+
+      // Find user in usersExcel with matching username (case-insensitive)
+      const user = usersExcel.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+      if(!user){
+        registerFailedLoginAttempt();
+        showLoginError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        showIPLog('ล็อกอินผิดพลาด');
+        return;
+      }
+
+      // Check if user is blocked
+      if(user.blocked){
+        showLoginError('บัญชีของคุณถูกบล็อกโดยผู้ดูแลระบบ โปรดติดต่อครูหรือผู้ดูแลระบบ');
+        showIPLog('ล็อกอินผิดพลาด (บัญชีถูกบล็อก)');
+        return;
+      }
+
+      // Check password (case-sensitive)
+      if(user.password !== password){
+        registerFailedLoginAttempt();
+        showLoginError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        showIPLog('ล็อกอินผิดพลาด');
+        return;
+      }
+
+      // Successful login -> reset login attempts for IP
+      resetLoginAttempts();
+
+      // Set user online
+      setUserOnline(user.username, true);
+      currentUser = user;
+
+      // Switch screens
+      loginScreen.style.display = 'none';
+      if(user.role === 'teacher'){
+        teacherScreen.style.display = 'block';
+        studentScreen.style.display = 'none';
+        renderTeacherUserList();
+        setupAutoLogout();
+      } else {
+        teacherScreen.style.display = 'none';
+        studentScreen.style.display = 'block';
+      }
     }
 
-    timeLeft = minutes * 60;
-    updateCountdown();
-    intervalId = setInterval(updateCountdown, 1000);
-    startButton.disabled = true; // Disable the button after starting
-    stopButton.disabled = false; // Enable Stop button
-});
+    // Event listeners
+    loginBtn.addEventListener('click', attemptLogin);
 
-// Initialize Stop button state
-stopButton.disabled = true;
-    </script>
+    passwordInput.addEventListener('keyup', (e) => {
+      if(e.key === 'Enter'){
+        attemptLogin();
+      }
+    });
+
+    usernameInput.addEventListener('keyup', (e) => {
+      if(e.key === 'Enter'){
+        attemptLogin();
+      }
+    });
+
+    teacherLogoutBtn.addEventListener('click', () => {
+      logout();
+    });
+
+    studentLogoutBtn.addEventListener('click', () => {
+      logout();
+    });
+
+    // Reset auto logout timer on any teacher interface interaction
+    teacherScreen.addEventListener('click', () => {
+      if(currentUser && currentUser.role === 'teacher'){
+        setupAutoLogout();
+      }
+    });
+
+  })();
+</script>
 </body>
-
 </html>
+
